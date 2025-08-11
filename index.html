@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lead Agent - AI-Powered B2B Lead Generation</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer">
+  <!-- Fallback Font Awesome CDN -->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.5.1/css/all.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-gray-50 font-sans">
+  <!-- Header -->
+  <header class="bg-white shadow-lg border-b">
+    <div class="container mx-auto px-6 py-4">
+      <div class="flex justify-between items-center">
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-lg flex items-center justify-center">
+            <i class="fas fa-robot text-white text-xl"></i>
+          </div>
+          <div>
+            <h1 class="text-2xl font-bold text-gray-800">Lead Agent</h1>
+            <p class="text-xs text-gray-500">AI-Powered Lead Generation</p>
+          </div>
+        </div>
+        <div class="flex items-center space-x-4">
+          <button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors duration-200 text-sm font-medium">
+            <i class="fas fa-user mr-2"></i>Profile
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container mx-auto px-6 py-8">
+    <!-- Navigation Tabs -->
+    <div class="mb-8">
+      <div class="border-b border-gray-200">
+        <nav class="flex space-x-8">
+          <button class="tab-btn active py-4 px-1 border-b-2 border-indigo-500 font-medium text-indigo-600" data-tab="product">
+            <i class="fas fa-bullseye mr-2"></i>
+            Product Analysis
+          </button>
+          <button class="tab-btn py-4 px-1 border-b-2 border-transparent font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300" data-tab="leads">
+            <i class="fas fa-users mr-2"></i>
+            Lead Generation
+          </button>
+          <button class="tab-btn py-4 px-1 border-b-2 border-transparent font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300" data-tab="sequences">
+            <i class="fas fa-envelope mr-2"></i>
+            Sequences
+          </button>
+        </nav>
+      </div>
+    </div>
+
+    <!-- Product Analysis Tab -->
+    <div id="product-tab" class="tab-content">
+      <!-- Product Input Form -->
+      <div id="product-form" class="bg-white rounded-lg shadow-md p-8 border">
+        <div class="text-center mb-8">
+          <h2 class="text-2xl font-bold text-gray-800 mb-4">What product or service are you selling?</h2>
+          <p class="text-gray-600 text-lg max-w-2xl mx-auto">
+            Describe your product or service in detail. Our AI will analyze it and identify your ideal target audience and markets.
+          </p>
+        </div>
+        
+        <div class="max-w-4xl mx-auto">
+          <textarea 
+            id="product-description" 
+            class="w-full h-32 p-4 border border-gray-300 rounded-lg text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 resize-none"
+            placeholder="Example: We offer a cloud-based project management platform that helps remote teams collaborate effectively. Our solution includes task management, real-time chat, file sharing, and automated workflow tools that integrate with popular business applications like Slack, Google Workspace, and Microsoft Teams."
+          ></textarea>
+          
+          <div class="flex justify-center mt-6">
+            <button id="analyze-btn" class="px-8 py-3 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-700 shadow-lg hover:shadow-xl transition-all duration-200">
+              <i class="fas fa-magic mr-2"></i>
+              Analyze Product
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Analysis Results -->
+      <div id="analysis-results" class="hidden bg-white rounded-lg shadow-md p-8 border">
+        <div class="flex justify-between items-center mb-6">
+          <h2 class="text-2xl font-bold text-gray-800">Analysis Results</h2>
+          <div class="flex items-center space-x-3">
+            <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm border border-green-200">
+              <i class="fas fa-check-circle mr-1"></i>Analysis Complete
+            </span>
+            <button id="back-to-form" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors duration-200 text-sm">
+              <i class="fas fa-arrow-left mr-2"></i>Back
+            </button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+          <!-- Target Audience -->
+          <div class="bg-gray-50 border border-gray-200 rounded-lg p-6">
+            <h3 class="text-xl font-semibold mb-4 text-gray-800 flex items-center">
+              <i class="fas fa-bullseye text-indigo-500 mr-3"></i>
+              Target Audience
+            </h3>
+            <div class="space-y-4">
+              <div class="bg-white border border-gray-200 rounded-lg p-4">
+                <h4 class="font-bold text-lg mb-2 text-gray-800">Mid-sized Technology Companies</h4>
+                <p class="text-gray-600 mb-4">
+                  Companies with 50-500 employees that need to coordinate multiple projects across remote teams and streamline workflow processes.
+                </p>
+                <div class="grid grid-cols-2 gap-3">
+                  <div class="bg-gray-50 p-3 rounded-lg border">
+                    <p class="text-xs text-gray-500 uppercase tracking-wide">Industry</p>
+                    <p class="font-semibold text-gray-800">Technology</p>
+                  </div>
+                  <div class="bg-gray-50 p-3 rounded-lg border">
+                    <p class="text-xs text-gray-500 uppercase tracking-wide">Company Size</p>
+                    <p class="font-semibold text-gray-800">50-500 employees</p>
+                  </div>
+                  <div class="bg-gray-50 p-3 rounded-lg border">
+                    <p class="text-xs text-gray-500 uppercase tracking-wide">Role</p>
+                    <p class="font-semibold text-gray-800">Project Managers</p>
+                  </div>
+                  <div class="bg-gray-50 p-3 rounded-lg border">
+                    <p class="text-xs text-gray-500 uppercase tracking-wide">Pain Point</p>
+                    <p class="font-semibold text-gray-800">Remote Coordination</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Recommended Markets -->
+          <div class="bg-gray-50 border border-gray-200 rounded-lg p-6">
+            <h3 class="text-xl font-semibold mb-4 text-gray-800 flex items-center">
+              <i class="fas fa-globe text-indigo-500 mr-3"></i>
+              Recommended Markets
+            </h3>
+            <div class="space-y-4">
+              <div class="flex items-start space-x-4 p-4 bg-white rounded-lg border border-gray-200">
+                <div class="w-8 h-8 bg-indigo-500 text-white rounded-full flex items-center justify-center font-bold text-sm">1</div>
+                <div>
+                  <h4 class="font-bold mb-1 text-gray-800">Software Development Companies</h4>
+                  <p class="text-gray-600 text-sm">Development teams managing multiple projects and sprints</p>
+                </div>
+              </div>
+              <div class="flex items-start space-x-4 p-4 bg-white rounded-lg border border-gray-200">
+                <div class="w-8 h-8 bg-indigo-500 text-white rounded-full flex items-center justify-center font-bold text-sm">2</div>
+                <div>
+                  <h4 class="font-bold mb-1 text-gray-800">Marketing Agencies</h4>
+                  <p class="text-gray-600 text-sm">Agencies coordinating campaigns across multiple clients</p>
+                </div>
+              </div>
+              <div class="flex items-start space-x-4 p-4 bg-white rounded-lg border border-gray-200">
+                <div class="w-8 h-8 bg-indigo-500 text-white rounded-full flex items-center justify-center font-bold text-sm">3</div>
+                <div>
+                  <h4 class="font-bold mb-1 text-gray-800">E-commerce Businesses</h4>
+                  <p class="text-gray-600 text-sm">Online retailers managing product launches and marketing</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Geographic Regions -->
+        <div class="bg-gray-50 border border-gray-200 rounded-lg p-6 mb-8">
+          <h3 class="text-xl font-semibold mb-4 text-gray-800 flex items-center">
+            <i class="fas fa-map text-indigo-500 mr-3"></i>
+            Top Target Regions
+          </h3>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="bg-white border border-gray-200 rounded-lg p-4 text-center">
+              <div class="text-2xl mb-2">🇺🇸</div>
+              <h4 class="font-bold text-gray-800">North America</h4>
+              <p class="text-gray-600 text-sm">High adoption of SaaS tools</p>
+            </div>
+            <div class="bg-white border border-gray-200 rounded-lg p-4 text-center">
+              <div class="text-2xl mb-2">🇪🇺</div>
+              <h4 class="font-bold text-gray-800">Europe</h4>
+              <p class="text-gray-600 text-sm">Growing remote work market</p>
+            </div>
+            <div class="bg-white border border-gray-200 rounded-lg p-4 text-center">
+              <div class="text-2xl mb-2">🌏</div>
+              <h4 class="font-bold text-gray-800">Asia-Pacific</h4>
+              <p class="text-gray-600 text-sm">Emerging tech markets</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="text-center">
+          <button id="generate-leads-btn" class="px-8 py-3 bg-green-600 text-white rounded-lg font-semibold hover:bg-green-700 shadow-lg hover:shadow-xl transition-all duration-200">
+            <i class="fas fa-users mr-2"></i>
+            Generate Leads
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lead Generation Tab -->
+    <div id="leads-tab" class="tab-content hidden">
+      <div class="bg-white rounded-lg shadow-md p-6 border">
+        <div class="flex justify-between items-center mb-6">
+          <h2 class="text-2xl font-bold text-gray-800">Generated Leads</h2>
+          <div class="flex items-center space-x-3">
+            <button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors duration-200 text-sm">
+              <i class="fas fa-filter mr-2"></i>Filter
+            </button>
+            <button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors duration-200 text-sm">
+              <i class="fas fa-sort mr-2"></i>Sort
+            </button>
+            <button class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors duration-200 text-sm">
+              <i class="fas fa-sync-alt mr-2"></i>Generate More
+            </button>
+          </div>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="mb-6">
+          <div class="relative max-w-md">
+            <input type="text" placeholder="Search leads..." class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+            <i class="fas fa-search absolute left-3 top-4 text-gray-400"></i>
+          </div>
+        </div>
+
+        <!-- Leads Table -->
+        <div class="overflow-x-auto">
+          <table class="w-full">
+            <thead>
+              <tr class="border-b border-gray-200 bg-gray-50">
+                <th class="text-left py-3 px-4 font-semibold text-gray-700">
+                  <input type="checkbox" class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                </th>
+                <th class="text-left py-3 px-4 font-semibold text-gray-700">Name</th>
+                <th class="text-left py-3 px-4 font-semibold text-gray-700">Company</th>
+                <th class="text-left py-3 px-4 font-semibold text-gray-700">Title</th>
+                <th class="text-left py-3 px-4 font-semibold text-gray-700">Email</th>
+                <th class="text-left py-3 px-4 font-semibold text-gray-700">Insight</th>
+                <th class="text-center py-3 px-4 font-semibold text-gray-700">Actions</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+              <tr class="hover:bg-gray-50 transition-colors duration-150">
+                <td class="py-3 px-4">
+                  <input type="checkbox" class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                </td>
+                <td class="py-3 px-4 font-medium text-gray-900">Sarah Johnson</td>
+                <td class="py-3 px-4 text-gray-700">TechFlow Solutions</td>
+                <td class="py-3 px-4 text-gray-600">Project Manager</td>
+                <td class="py-3 px-4 text-gray-600">sarah.j@techflow.io</td>
+                <td class="py-3 px-4 text-gray-600">Scaling remote team operations</td>
+                <td class="py-3 px-4 text-center">
+                  <div class="flex justify-center space-x-2">
+                    <button class="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors duration-150">
+                      <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors duration-150">
+                      <i class="fas fa-envelope"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr class="hover:bg-gray-50 transition-colors duration-150">
+                <td class="py-3 px-4">
+                  <input type="checkbox" class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                </td>
+                <td class="py-3 px-4 font-medium text-gray-900">Michael Chen</td>
+                <td class="py-3 px-4 text-gray-700">Nova Digital</td>
+                <td class="py-3 px-4 text-gray-600">Director of Operations</td>
+                <td class="py-3 px-4 text-gray-600">m.chen@novadigital.com</td>
+                <td class="py-3 px-4 text-gray-600">Expanding to 5 new markets</td>
+                <td class="py-3 px-4 text-center">
+                  <div class="flex justify-center space-x-2">
+                    <button class="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors duration-150">
+                      <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors duration-150">
+                      <i class="fas fa-envelope"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr class="hover:bg-gray-50 transition-colors duration-150">
+                <td class="py-3 px-4">
+                  <input type="checkbox" class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                </td>
+                <td class="py-3 px-4 font-medium text-gray-900">Emily Rodriguez</td>
+                <td class="py-3 px-4 text-gray-700">Spark Creative</td>
+                <td class="py-3 px-4 text-gray-600">Marketing Team Lead</td>
+                <td class="py-3 px-4 text-gray-600">e.rodriguez@sparkcreative.co</td>
+                <td class="py-3 px-4 text-gray-600">Improving client collaboration workflows</td>
+                <td class="py-3 px-4 text-center">
+                  <div class="flex justify-center space-x-2">
+                    <button class="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors duration-150">
+                      <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors duration-150">
+                      <i class="fas fa-envelope"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="flex justify-between items-center mt-6">
+          <div class="text-gray-600">
+            Showing 3 of 47 leads
+          </div>
+          <div class="flex space-x-2">
+            <button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors duration-200 text-sm">
+              Previous
+            </button>
+            <button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors duration-200 text-sm">
+              Next
+            </button>
+          </div>
+        </div>
+
+        <div class="text-center mt-8">
+          <button id="create-sequence-btn" class="px-8 py-3 bg-purple-600 text-white rounded-lg font-semibold hover:bg-purple-700 shadow-lg hover:shadow-xl transition-all duration-200">
+            <i class="fas fa-envelope mr-2"></i>
+            Create Sequence
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sequences Tab -->
+    <div id="sequences-tab" class="tab-content hidden">
+      <div class="bg-white rounded-lg shadow-md p-6 border">
+        <div class="flex justify-between items-center mb-6">
+          <h2 class="text-2xl font-bold text-gray-800">Create Outreach Sequence</h2>
+          <button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors duration-200 text-sm">
+            <i class="fas fa-save mr-2"></i>Save Template
+          </button>
+        </div>
+
+        <!-- Selected Leads -->
+        <div class="mb-6">
+          <h3 class="text-lg font-semibold mb-3 text-gray-800">Selected Leads (3)</h3>
+          <div class="flex flex-wrap gap-3">
+            <div class="flex items-center px-4 py-2 bg-indigo-50 border border-indigo-200 rounded-full">
+              <span class="text-sm text-gray-700">Sarah Johnson (TechFlow)</span>
+              <button class="ml-2 text-gray-500 hover:text-gray-700">
+                <i class="fas fa-times"></i>
+              </button>
+            </div>
+            <div class="flex items-center px-4 py-2 bg-indigo-50 border border-indigo-200 rounded-full">
+              <span class="text-sm text-gray-700">Michael Chen (Nova Digital)</span>
+              <button class="ml-2 text-gray-500 hover:text-gray-700">
+                <i class="fas fa-times"></i>
+              </button>
+            </div>
+            <div class="flex items-center px-4 py-2 bg-indigo-50 border border-indigo-200 rounded-full">
+              <span class="text-sm text-gray-700">Emily Rodriguez (Spark Creative)</span>
+              <button class="ml-2 text-gray-500 hover:text-gray-700">
+                <i class="fas fa-times"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Email Subject -->
+        <div class="mb-6">
+          <label class="block text-lg font-semibold mb-3 text-gray-800">Email Subject</label>
+          <input type="text" value="Streamline Your Team's Project Management" class="w-full p-4 border border-gray-300 rounded-lg text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+        </div>
+
+        <!-- Template Variables -->
+        <div class="mb-6">
+          <label class="block text-lg font-semibold mb-3 text-gray-800">Available Variables</label>
+          <div class="bg-gray-50 border border-gray-200 rounded-lg p-4">
+            <p class="text-gray-600 mb-3">Use these placeholders in your email template:</p>
+            <div class="flex flex-wrap gap-2">
+              <span class="px-3 py-1 bg-indigo-100 border border-indigo-200 rounded-lg text-sm font-mono text-gray-700">{name}</span>
+              <span class="px-3 py-1 bg-indigo-100 border border-indigo-200 rounded-lg text-sm font-mono text-gray-700">{company}</span>
+              <span class="px-3 py-1 bg-indigo-100 border border-indigo-200 rounded-lg text-sm font-mono text-gray-700">{title}</span>
+              <span class="px-3 py-1 bg-indigo-100 border border-indigo-200 rounded-lg text-sm font-mono text-gray-700">{insight}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Email Template -->
+        <div class="mb-8">
+          <label class="block text-lg font-semibold mb-3 text-gray-800">Email Template</label>
+          <textarea class="w-full h-64 p-4 border border-gray-300 rounded-lg text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none">Hi {name},
+
+I noticed that {company} is {insight}. As someone working in the {title} role, you're probably familiar with the challenges of coordinating projects across remote teams.
+
+Our platform has helped similar companies:
+• Reduce coordination time by 40%
+• Improve project visibility across teams
+• Streamline workflows with automated processes
+
+Would you be interested in a brief 15-minute demo to see how we could help {company} scale more efficiently?
+
+Best regards,
+[Your Name]</textarea>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex justify-between items-center">
+          <button class="px-6 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors duration-200 font-medium">
+            <i class="fas fa-eye mr-2"></i>Preview Emails
+          </button>
+          <button class="px-8 py-3 bg-green-600 text-white rounded-lg font-semibold hover:bg-green-700 shadow-lg hover:shadow-xl transition-all duration-200">
+            <i class="fas fa-paper-plane mr-2"></i>
+            Send Sequence
+          </button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-gray-800 text-white py-8 mt-16">
+    <div class="container mx-auto px-6">
+      <div class="flex flex-col md:flex-row justify-between items-center">
+        <div class="mb-4 md:mb-0">
+          <div class="flex items-center space-x-3">
+            <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-lg flex items-center justify-center">
+              <i class="fas fa-robot text-white"></i>
+            </div>
+            <div>
+              <h3 class="text-xl font-bold">Lead Agent</h3>
+              <p class="text-gray-400 text-sm">AI-Powered B2B Lead Generation</p>
+            </div>
+          </div>
+        </div>
+        <div class="flex space-x-6 text-gray-400">
+          <a href="#" class="hover:text-white transition-colors duration-200">
+            <i class="fas fa-book mr-1"></i>Documentation
+          </a>
+          <a href="#" class="hover:text-white transition-colors duration-200">
+            <i class="fas fa-question-circle mr-1"></i>Support
+          </a>
+          <a href="#" class="hover:text-white transition-colors duration-200">
+            <i class="fab fa-github mr-1"></i>GitHub
+          </a>
+        </div>
+      </div>
+      <div class="mt-6 text-center text-gray-500 text-sm border-t border-gray-700 pt-6">
+        &copy; 2025 Lead Agent. All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
