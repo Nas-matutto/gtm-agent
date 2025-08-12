@@ -24,8 +24,6 @@ function setupTabNavigation() {
         button.addEventListener('click', function() {
             const tabName = this.getAttribute('data-tab');
             showTab(tabName);
-            
-            // The showTab function now handles the active state updates
         });
     });
 }
@@ -134,88 +132,134 @@ function setupProductAnalysis() {
     }
 }
 
-// New function to update the analysis results with real data
+// Enhanced function to update the analysis results with new data structure
 function updateAnalysisResults(data) {
-    // Update target audience section
+    console.log('Updating analysis results with data:', data);
+    
+    // Update target audience section with more detailed information
     const targetAudienceSection = document.querySelector('#analysis-results .grid .bg-gray-50:first-child');
     if (targetAudienceSection && data.target_audience) {
         const audienceCard = targetAudienceSection.querySelector('.bg-white');
         if (audienceCard) {
-            // Update primary audience
-            audienceCard.querySelector('h4').textContent = data.target_audience.primary || 'Target Audience';
+            // Update primary audience title
+            const titleElement = audienceCard.querySelector('h4');
+            if (titleElement) {
+                titleElement.textContent = data.target_audience.primary_company_type || 'Target Company Type';
+            }
             
-            // Update description
+            // Update description with more detailed info
             const description = audienceCard.querySelector('p');
             if (description) {
-                description.textContent = `Companies in the ${data.target_audience.industry} industry, typically ${data.target_audience.company_size}, facing challenges with ${data.target_audience.pain_points?.join(', ') || 'various operational issues'}.`;
+                const decisionMaker = data.target_audience.primary_decision_maker;
+                const companyChar = data.target_audience.company_characteristics || 'Target companies';
+                const companySize = data.target_audience.company_size || 'optimal size';
+                const decisionMakerTitle = decisionMaker?.title || 'Key decision maker';
+                const department = decisionMaker?.department || 'relevant department';
+                
+                description.textContent = `${companyChar} with ${companySize}. Primary decision maker: ${decisionMakerTitle} in ${department}.`;
             }
             
-            // Update the details grid
+            // Update the details grid with new structure
             const detailDivs = audienceCard.querySelectorAll('.grid > div');
             if (detailDivs.length >= 4) {
-                detailDivs[0].querySelector('p').textContent = data.target_audience.industry || 'Technology';
-                detailDivs[1].querySelector('p').textContent = data.target_audience.company_size || '50-500 employees';
-                detailDivs[2].querySelector('p').textContent = data.target_audience.roles?.[0] || 'Decision Makers';
-                detailDivs[3].querySelector('p').textContent = data.target_audience.pain_points?.[0] || 'Operational Efficiency';
+                // Industry
+                const industryLabel = detailDivs[0].querySelector('p.text-xs');
+                const industryValue = detailDivs[0].querySelector('p.font-semibold');
+                if (industryLabel && industryValue) {
+                    industryLabel.textContent = 'INDUSTRY';
+                    industryValue.textContent = data.target_audience.industry || 'Technology';
+                }
+                
+                // Company Size
+                const sizeLabel = detailDivs[1].querySelector('p.text-xs');
+                const sizeValue = detailDivs[1].querySelector('p.font-semibold');
+                if (sizeLabel && sizeValue) {
+                    sizeLabel.textContent = 'COMPANY SIZE';
+                    sizeValue.textContent = data.target_audience.company_size || '50-500 employees';
+                }
+                
+                // Decision Maker
+                const decisionLabel = detailDivs[2].querySelector('p.text-xs');
+                const decisionValue = detailDivs[2].querySelector('p.font-semibold');
+                if (decisionLabel && decisionValue) {
+                    decisionLabel.textContent = 'DECISION MAKER';
+                    decisionValue.textContent = data.target_audience.primary_decision_maker?.title || 'Key Executive';
+                }
+                
+                // Revenue Range
+                const revenueLabel = detailDivs[3].querySelector('p.text-xs');
+                const revenueValue = detailDivs[3].querySelector('p.font-semibold');
+                if (revenueLabel && revenueValue) {
+                    revenueLabel.textContent = 'REVENUE RANGE';
+                    revenueValue.textContent = data.target_audience.revenue_range || 'Mid-market';
+                }
             }
         }
     }
     
-    // Update recommended markets section
-    const marketsSection = document.querySelector('#analysis-results .grid .bg-gray-50:last-child');
-    if (marketsSection && data.recommended_markets) {
-        const marketsContainer = marketsSection.querySelector('.space-y-4');
-        if (marketsContainer) {
-            // Clear existing markets
-            marketsContainer.innerHTML = '';
-            
-            // Add new markets from AI response
-            data.recommended_markets.forEach((market, index) => {
-                const marketDiv = document.createElement('div');
-                marketDiv.className = 'flex items-start space-x-4 p-4 bg-white rounded-lg border border-gray-200';
-                marketDiv.innerHTML = `
-                    <div class="w-8 h-8 bg-indigo-500 text-white rounded-full flex items-center justify-center font-bold text-sm">${index + 1}</div>
-                    <div>
-                        <h4 class="font-bold mb-1 text-gray-800">${market.market}</h4>
-                        <p class="text-gray-600 text-sm">${market.description}</p>
-                    </div>
-                `;
-                marketsContainer.appendChild(marketDiv);
-            });
-        }
+    // Update Additional Target Audiences section
+    const audiencesSection = document.querySelector('#additional-audiences-container');
+    if (audiencesSection && data.additional_target_audiences) {
+        // Clear existing content
+        audiencesSection.innerHTML = '';
+        
+        // Add new audiences from AI response
+        data.additional_target_audiences.forEach((audience, index) => {
+            const audienceDiv = document.createElement('div');
+            audienceDiv.className = 'flex items-start space-x-4 p-4 bg-white rounded-lg border border-gray-200';
+            audienceDiv.innerHTML = `
+                <div class="w-8 h-8 bg-indigo-500 text-white rounded-full flex items-center justify-center font-bold text-sm">${audience.rank}</div>
+                <div>
+                    <h4 class="font-bold mb-1 text-gray-800">${audience.company_type}</h4>
+                    <p class="text-gray-600 text-sm">${audience.why_target_them}</p>
+                </div>
+            `;
+            audiencesSection.appendChild(audienceDiv);
+        });
     }
     
-    // Update regions section
-    const regionsSection = document.querySelector('#analysis-results .bg-gray-50.border.border-gray-200.rounded-lg.p-6.mb-8');
-    if (regionsSection && data.target_regions) {
-        const regionsGrid = regionsSection.querySelector('.grid');
-        if (regionsGrid) {
-            // Clear existing regions
-            regionsGrid.innerHTML = '';
+    // Update Top Target Countries section (9 countries)
+    const countriesSection = document.querySelector('#target-countries-container');
+    if (countriesSection && data.top_target_countries) {
+        // Clear existing content
+        countriesSection.innerHTML = '';
+        
+        // Country flag mapping
+        const countryFlags = {
+            'United States': '🇺🇸', 'Canada': '🇨🇦', 'United Kingdom': '🇬🇧', 'Germany': '🇩🇪',
+            'France': '🇫🇷', 'Australia': '🇦🇺', 'Japan': '🇯🇵', 'Singapore': '🇸🇬',
+            'Netherlands': '🇳🇱', 'Sweden': '🇸🇪', 'Switzerland': '🇨🇭', 'Norway': '🇳🇴',
+            'Denmark': '🇩🇰', 'Finland': '🇫🇮', 'New Zealand': '🇳🇿', 'Ireland': '🇮🇪',
+            'Israel': '🇮🇱', 'South Korea': '🇰🇷', 'Taiwan': '🇹🇼', 'Hong Kong': '🇭🇰',
+            'UAE': '🇦🇪', 'Saudi Arabia': '🇸🇦', 'Brazil': '🇧🇷', 'Mexico': '🇲🇽',
+            'India': '🇮🇳', 'China': '🇨🇳', 'South Africa': '🇿🇦', 'Italy': '🇮🇹',
+            'Spain': '🇪🇸', 'Poland': '🇵🇱', 'Czech Republic': '🇨🇿', 'Belgium': '🇧🇪',
+            'Austria': '🇦🇹', 'Portugal': '🇵🇹', 'Greece': '🇬🇷', 'Turkey': '🇹🇷'
+        };
+        
+        // Add countries from AI response
+        data.top_target_countries.forEach((country, index) => {
+            const countryDiv = document.createElement('div');
+            countryDiv.className = 'bg-white border border-gray-200 rounded-lg p-4 text-center relative';
             
-            // Add new regions from AI response
-            data.target_regions.forEach(region => {
-                const regionDiv = document.createElement('div');
-                regionDiv.className = 'bg-white border border-gray-200 rounded-lg p-4 text-center';
-                
-                // Simple flag emoji mapping
-                const flags = {
-                    'North America': '🇺🇸',
-                    'Europe': '🇪🇺',
-                    'Asia-Pacific': '🌏',
-                    'Latin America': '🌎',
-                    'Middle East': '🌍',
-                    'Africa': '🌍'
-                };
-                
-                regionDiv.innerHTML = `
-                    <div class="text-2xl mb-2">${flags[region.region] || '🌍'}</div>
-                    <h4 class="font-bold text-gray-800">${region.region}</h4>
-                    <p class="text-gray-600 text-sm">${region.reasoning || `Score: ${region.score}`}</p>
-                `;
-                regionsGrid.appendChild(regionDiv);
-            });
-        }
+            // Add ranking badge with different colors for top 3
+            let rankingBadge;
+            if (country.rank <= 3) {
+                rankingBadge = `<div class="absolute top-2 left-2 w-6 h-6 bg-indigo-500 text-white rounded-full flex items-center justify-center text-xs font-bold">${country.rank}</div>`;
+            } else if (country.rank <= 6) {
+                rankingBadge = `<div class="absolute top-2 left-2 w-6 h-6 bg-blue-500 text-white rounded-full flex items-center justify-center text-xs font-bold">${country.rank}</div>`;
+            } else {
+                rankingBadge = `<div class="absolute top-2 left-2 w-6 h-6 bg-gray-400 text-white rounded-full flex items-center justify-center text-xs font-bold">${country.rank}</div>`;
+            }
+            
+            countryDiv.innerHTML = `
+                ${rankingBadge}
+                <div class="text-2xl mb-2">${countryFlags[country.country] || '🌍'}</div>
+                <h4 class="font-bold text-gray-800 text-sm">${country.country}</h4>
+                <p class="text-gray-600 text-xs mt-2 leading-tight">${country.market_size_insight}</p>
+            `;
+            countriesSection.appendChild(countryDiv);
+        });
     }
 }
 
@@ -245,7 +289,7 @@ function showProductForm() {
 
 // Lead Generation functionality
 function setupLeadGeneration() {
-    const selectAllCheckbox = document.getElementById('select-all-leads');
+    const selectAllCheckbox = document.querySelector('thead input[type="checkbox"]');
     const leadCheckboxes = document.querySelectorAll('tbody input[type="checkbox"]');
     const createSequenceBtn = document.getElementById('create-sequence-btn');
     
@@ -285,10 +329,6 @@ function setupLeadGeneration() {
             
             // Switch to sequences tab
             showTab('sequences');
-            const sequencesTabBtn = document.querySelector('[data-tab="sequences"]');
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            sequencesTabBtn.classList.add('active');
-            
             showNotification(`Creating sequence for ${selectedLeads.length} selected leads...`, 'success');
         });
     }
@@ -298,8 +338,8 @@ function setupLeadGeneration() {
 }
 
 function setupLeadActions() {
-    const viewButtons = document.querySelectorAll('.view-lead-btn');
-    const emailButtons = document.querySelectorAll('.email-lead-btn');
+    const viewButtons = document.querySelectorAll('button[class*="text-blue-600"]');
+    const emailButtons = document.querySelectorAll('button[class*="text-green-600"]');
     
     viewButtons.forEach(button => {
         button.addEventListener('click', function() {
@@ -326,11 +366,11 @@ function updateSelectedCount() {
     
     if (createSequenceBtn) {
         if (selectedCount > 0) {
-            createSequenceBtn.innerHTML = `<i class="fas fa-envelope mr-3"></i>Create Sequence (${selectedCount})`;
+            createSequenceBtn.innerHTML = `<i class="fas fa-envelope mr-2"></i>Create Sequence (${selectedCount})`;
             createSequenceBtn.classList.remove('opacity-50');
             createSequenceBtn.disabled = false;
         } else {
-            createSequenceBtn.innerHTML = '<i class="fas fa-envelope mr-3"></i>Create Sequence';
+            createSequenceBtn.innerHTML = '<i class="fas fa-envelope mr-2"></i>Create Sequence';
             createSequenceBtn.classList.add('opacity-50');
             createSequenceBtn.disabled = true;
         }
@@ -339,45 +379,61 @@ function updateSelectedCount() {
 
 // Sequences functionality
 function setupSequences() {
-    const previewBtn = document.querySelector('[data-action="preview"]');
-    const sendBtn = document.querySelector('[data-action="send"]');
+    const previewBtn = document.querySelector('button[class*="bg-gray-100"]');
+    const sendBtn = document.querySelector('button[class*="bg-green-600"]');
     const removeButtons = document.querySelectorAll('.fa-times');
     
     // Remove lead from sequence
     removeButtons.forEach(button => {
         button.addEventListener('click', function() {
-            const leadTag = this.closest('div');
-            leadTag.remove();
-            showNotification('Lead removed from sequence', 'info');
+            const leadTag = this.closest('div.flex');
+            if (leadTag && leadTag.classList.contains('bg-indigo-50')) {
+                leadTag.remove();
+                showNotification('Lead removed from sequence', 'info');
+            }
         });
     });
     
     // Preview functionality
     if (previewBtn) {
         previewBtn.addEventListener('click', function() {
-            showNotification('Opening email preview...', 'info');
-            // Here you would show a preview modal
+            const buttonText = this.textContent.trim();
+            if (buttonText.includes('Preview')) {
+                showNotification('Opening email preview...', 'info');
+                // Here you would show a preview modal
+            }
         });
     }
     
     // Send sequence
     if (sendBtn) {
         sendBtn.addEventListener('click', function() {
-            const subject = document.querySelector('input[type="text"]').value;
-            const template = document.querySelector('textarea').value;
-            
-            if (!subject.trim() || !template.trim()) {
-                showNotification('Please fill in both subject and email template', 'warning');
-                return;
+            const buttonText = this.textContent.trim();
+            if (buttonText.includes('Send')) {
+                const subjectInput = document.querySelector('#sequences-tab input[type="text"]');
+                const templateTextarea = document.querySelector('#sequences-tab textarea');
+                
+                if (!subjectInput || !templateTextarea) {
+                    showNotification('Email form not found', 'error');
+                    return;
+                }
+                
+                const subject = subjectInput.value;
+                const template = templateTextarea.value;
+                
+                if (!subject.trim() || !template.trim()) {
+                    showNotification('Please fill in both subject and email template', 'warning');
+                    return;
+                }
+                
+                showLoadingState(this, 'Sending...');
+                
+                // Simulate sending
+                setTimeout(() => {
+                    hideLoadingState(this, '<i class="fas fa-paper-plane mr-2"></i>Send Sequence');
+                    showNotification('Sequence sent successfully!', 'success');
+                }, 3000);
             }
-            
-            showLoadingState(this, 'Sending...');
-            
-            // Simulate sending
-            setTimeout(() => {
-                hideLoadingState(this, 'Send Sequence');
-                showNotification('Sequence sent successfully!', 'success');
-            }, 3000);
         });
     }
 }
@@ -398,28 +454,28 @@ function hideLoadingState(button, originalText) {
 function showNotification(message, type = 'info') {
     // Create notification element
     const notification = document.createElement('div');
-    notification.className = `fixed top-4 right-4 z-50 px-6 py-3 rounded-lg shadow-lg backdrop-blur-lg border fade-in`;
+    notification.className = `fixed top-4 right-4 z-50 px-6 py-3 rounded-lg shadow-lg border fade-in max-w-sm`;
     
-    // Set styles based on type
+    // Set styles based on type for light theme
     switch (type) {
         case 'success':
-            notification.classList.add('bg-green-500/20', 'border-green-500/30', 'text-green-300');
+            notification.classList.add('bg-green-100', 'border-green-200', 'text-green-800');
             break;
         case 'warning':
-            notification.classList.add('bg-yellow-500/20', 'border-yellow-500/30', 'text-yellow-300');
+            notification.classList.add('bg-yellow-100', 'border-yellow-200', 'text-yellow-800');
             break;
         case 'error':
-            notification.classList.add('bg-red-500/20', 'border-red-500/30', 'text-red-300');
+            notification.classList.add('bg-red-100', 'border-red-200', 'text-red-800');
             break;
         default:
-            notification.classList.add('bg-blue-500/20', 'border-blue-500/30', 'text-blue-300');
+            notification.classList.add('bg-blue-100', 'border-blue-200', 'text-blue-800');
     }
     
     notification.innerHTML = `
-        <div class="flex items-center">
-            <span>${message}</span>
-            <button class="ml-3 text-white/60 hover:text-white" onclick="this.parentElement.parentElement.remove()">
-                <i class="fas fa-times"></i>
+        <div class="flex items-center justify-between">
+            <span class="text-sm font-medium">${message}</span>
+            <button class="ml-3 text-gray-500 hover:text-gray-700 text-lg" onclick="this.parentElement.parentElement.remove()">
+                ×
             </button>
         </div>
     `;

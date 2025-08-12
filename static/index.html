@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer">
   <!-- Fallback Font Awesome CDN -->
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.5.1/css/all.css">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="/static/styles.css">
 </head>
 <body class="bg-gray-50 font-sans">
   <!-- Header -->
@@ -101,7 +101,7 @@
           <div class="bg-gray-50 border border-gray-200 rounded-lg p-6">
             <h3 class="text-xl font-semibold mb-4 text-gray-800 flex items-center">
               <i class="fas fa-bullseye text-indigo-500 mr-3"></i>
-              Target Audience
+              Primary Target Company
             </h3>
             <div class="space-y-4">
               <div class="bg-white border border-gray-200 rounded-lg p-4">
@@ -119,25 +119,25 @@
                     <p class="font-semibold text-gray-800">50-500 employees</p>
                   </div>
                   <div class="bg-gray-50 p-3 rounded-lg border">
-                    <p class="text-xs text-gray-500 uppercase tracking-wide">Role</p>
+                    <p class="text-xs text-gray-500 uppercase tracking-wide">Decision Maker</p>
                     <p class="font-semibold text-gray-800">Project Managers</p>
                   </div>
                   <div class="bg-gray-50 p-3 rounded-lg border">
-                    <p class="text-xs text-gray-500 uppercase tracking-wide">Pain Point</p>
-                    <p class="font-semibold text-gray-800">Remote Coordination</p>
+                    <p class="text-xs text-gray-500 uppercase tracking-wide">Revenue Range</p>
+                    <p class="font-semibold text-gray-800">Mid-market</p>
                   </div>
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- Recommended Markets -->
+          <!-- Additional Target Audiences -->
           <div class="bg-gray-50 border border-gray-200 rounded-lg p-6">
             <h3 class="text-xl font-semibold mb-4 text-gray-800 flex items-center">
-              <i class="fas fa-globe text-indigo-500 mr-3"></i>
-              Recommended Markets
+              <i class="fas fa-building text-indigo-500 mr-3"></i>
+              Additional Target Audiences
             </h3>
-            <div class="space-y-4">
+            <div class="space-y-3" id="additional-audiences-container">
               <div class="flex items-start space-x-4 p-4 bg-white rounded-lg border border-gray-200">
                 <div class="w-8 h-8 bg-indigo-500 text-white rounded-full flex items-center justify-center font-bold text-sm">1</div>
                 <div>
@@ -145,46 +145,25 @@
                   <p class="text-gray-600 text-sm">Development teams managing multiple projects and sprints</p>
                 </div>
               </div>
-              <div class="flex items-start space-x-4 p-4 bg-white rounded-lg border border-gray-200">
-                <div class="w-8 h-8 bg-indigo-500 text-white rounded-full flex items-center justify-center font-bold text-sm">2</div>
-                <div>
-                  <h4 class="font-bold mb-1 text-gray-800">Marketing Agencies</h4>
-                  <p class="text-gray-600 text-sm">Agencies coordinating campaigns across multiple clients</p>
-                </div>
-              </div>
-              <div class="flex items-start space-x-4 p-4 bg-white rounded-lg border border-gray-200">
-                <div class="w-8 h-8 bg-indigo-500 text-white rounded-full flex items-center justify-center font-bold text-sm">3</div>
-                <div>
-                  <h4 class="font-bold mb-1 text-gray-800">E-commerce Businesses</h4>
-                  <p class="text-gray-600 text-sm">Online retailers managing product launches and marketing</p>
-                </div>
-              </div>
+              <!-- More items will be added by JavaScript -->
             </div>
           </div>
         </div>
 
-        <!-- Geographic Regions -->
+        <!-- Top Target Countries -->
         <div class="bg-gray-50 border border-gray-200 rounded-lg p-6 mb-8">
           <h3 class="text-xl font-semibold mb-4 text-gray-800 flex items-center">
-            <i class="fas fa-map text-indigo-500 mr-3"></i>
-            Top Target Regions
+            <i class="fas fa-flag text-indigo-500 mr-3"></i>
+            Top Target Countries
           </h3>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div class="bg-white border border-gray-200 rounded-lg p-4 text-center">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="target-countries-container">
+            <div class="bg-white border border-gray-200 rounded-lg p-4 text-center relative">
+              <div class="absolute top-2 left-2 w-6 h-6 bg-indigo-500 text-white rounded-full flex items-center justify-center text-xs font-bold">1</div>
               <div class="text-2xl mb-2">🇺🇸</div>
-              <h4 class="font-bold text-gray-800">North America</h4>
-              <p class="text-gray-600 text-sm">High adoption of SaaS tools</p>
+              <h4 class="font-bold text-gray-800 text-sm">United States</h4>
+              <p class="text-gray-600 text-xs mt-2 leading-tight">High adoption of SaaS tools</p>
             </div>
-            <div class="bg-white border border-gray-200 rounded-lg p-4 text-center">
-              <div class="text-2xl mb-2">🇪🇺</div>
-              <h4 class="font-bold text-gray-800">Europe</h4>
-              <p class="text-gray-600 text-sm">Growing remote work market</p>
-            </div>
-            <div class="bg-white border border-gray-200 rounded-lg p-4 text-center">
-              <div class="text-2xl mb-2">🌏</div>
-              <h4 class="font-bold text-gray-800">Asia-Pacific</h4>
-              <p class="text-gray-600 text-sm">Emerging tech markets</p>
-            </div>
+            <!-- More countries will be added by JavaScript -->
           </div>
         </div>
 
@@ -448,6 +427,6 @@ Best regards,
     </div>
   </footer>
 
-  <script src="script.js"></script>
+  <script src="/static/script.js"></script>
 </body>
 </html>
