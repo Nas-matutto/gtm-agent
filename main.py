@@ -57,11 +57,17 @@ async def health_check():
         "environment": os.getenv("ENVIRONMENT", "development")
     }
 
+# Import the AI service
+from app.services.ai_service import AIAnalysisService
+
+# Initialize AI service
+ai_service = AIAnalysisService()
+
 # Product Analysis endpoints
 @app.post("/api/analyze-product")
 async def analyze_product(product_data: dict):
     """
-    Analyze product description and return target audience insights
+    Analyze product description and return target audience insights using Claude AI
     
     Expected payload:
     {
@@ -76,49 +82,38 @@ async def analyze_product(product_data: dict):
                 detail="Product description is required"
             )
         
-        # TODO: Implement AI analysis logic
-        # This is where you'll integrate with OpenAI/Anthropic for analysis
+        if not description.strip():
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Product description cannot be empty"
+            )
         
-        # Placeholder response
-        analysis_result = {
-            "target_audience": {
-                "primary": "Mid-sized Technology Companies",
-                "industry": "Technology",
-                "company_size": "50-500 employees",
-                "role": "Project Managers, CTOs",
-                "pain_points": ["Remote team coordination", "Workflow inefficiency"]
-            },
-            "recommended_markets": [
-                {
-                    "rank": 1,
-                    "market": "Software Development Companies",
-                    "description": "Development teams managing multiple projects"
-                },
-                {
-                    "rank": 2,
-                    "market": "Marketing Agencies",
-                    "description": "Agencies coordinating campaigns across clients"
-                },
-                {
-                    "rank": 3,
-                    "market": "E-commerce Businesses",
-                    "description": "Online retailers managing product launches"
-                }
-            ],
-            "target_regions": [
-                {"region": "North America", "score": 0.9},
-                {"region": "Europe", "score": 0.8},
-                {"region": "Asia-Pacific", "score": 0.7}
-            ]
-        }
+        # Validate API key first
+        if not ai_service.validate_api_key():
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="AI service is not properly configured. Please check API keys."
+            )
         
-        return {"success": True, "data": analysis_result}
+        # Use Claude AI to analyze the product
+        analysis_result = await ai_service.analyze_product(description)
         
+        if not analysis_result["success"]:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail=f"AI analysis failed: {analysis_result.get('error', 'Unknown error')}"
+            )
+        
+        return analysis_result
+        
+    except HTTPException:
+        # Re-raise HTTP exceptions
+        raise
     except Exception as e:
         logger.error(f"Error analyzing product: {str(e)}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Failed to analyze product"
+            detail="Failed to analyze product. Please try again."
         )
 
 # Lead Generation endpoints

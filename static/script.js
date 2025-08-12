@@ -25,9 +25,7 @@ function setupTabNavigation() {
             const tabName = this.getAttribute('data-tab');
             showTab(tabName);
             
-            // Update active state
-            tabButtons.forEach(btn => btn.classList.remove('active'));
-            this.classList.add('active');
+            // The showTab function now handles the active state updates
         });
     });
 }
@@ -47,6 +45,22 @@ function showTab(tabName) {
         targetTab.classList.remove('hidden');
         targetTab.classList.add('fade-in');
     }
+    
+    // Update tab button active states
+    const allTabButtons = document.querySelectorAll('.tab-btn');
+    allTabButtons.forEach(btn => {
+        btn.classList.remove('active');
+        btn.classList.add('border-transparent', 'text-gray-500');
+        btn.classList.remove('border-indigo-500', 'text-indigo-600');
+    });
+    
+    // Set active state for current tab
+    const activeTabButton = document.querySelector(`[data-tab="${tabName}"]`);
+    if (activeTabButton) {
+        activeTabButton.classList.add('active');
+        activeTabButton.classList.remove('border-transparent', 'text-gray-500');
+        activeTabButton.classList.add('border-indigo-500', 'text-indigo-600');
+    }
 }
 
 // Product Analysis functionality
@@ -58,7 +72,7 @@ function setupProductAnalysis() {
     const generateLeadsBtn = document.getElementById('generate-leads-btn');
     
     if (analyzeBtn) {
-        analyzeBtn.addEventListener('click', function() {
+        analyzeBtn.addEventListener('click', async function() {
             const description = document.getElementById('product-description').value;
             
             if (!description.trim()) {
@@ -67,13 +81,41 @@ function setupProductAnalysis() {
             }
             
             // Show loading state
-            showLoadingState(analyzeBtn, 'Analyzing...');
+            showLoadingState(analyzeBtn, 'Analyzing with AI...');
             
-            // Simulate API call
-            setTimeout(() => {
-                hideLoadingState(analyzeBtn, 'Analyze Product');
-                showAnalysisResults();
-            }, 2000);
+            try {
+                // Make actual API call to your backend
+                const response = await fetch('/api/analyze-product', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        description: description
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(result.detail || 'Analysis failed');
+                }
+                
+                if (result.success) {
+                    // Update the UI with real AI results
+                    updateAnalysisResults(result.data);
+                    showAnalysisResults();
+                    showNotification('Analysis completed successfully!', 'success');
+                } else {
+                    throw new Error(result.error || 'Analysis failed');
+                }
+                
+            } catch (error) {
+                console.error('Analysis error:', error);
+                showNotification(`Analysis failed: ${error.message}`, 'error');
+            } finally {
+                hideLoadingState(analyzeBtn, '<i class="fas fa-magic mr-2"></i>Analyze Product');
+            }
         });
     }
     
@@ -87,12 +129,93 @@ function setupProductAnalysis() {
         generateLeadsBtn.addEventListener('click', function() {
             // Switch to leads tab
             showTab('leads');
-            const leadsTabBtn = document.querySelector('[data-tab="leads"]');
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            leadsTabBtn.classList.add('active');
-            
             showNotification('Generating leads based on your analysis...', 'info');
         });
+    }
+}
+
+// New function to update the analysis results with real data
+function updateAnalysisResults(data) {
+    // Update target audience section
+    const targetAudienceSection = document.querySelector('#analysis-results .grid .bg-gray-50:first-child');
+    if (targetAudienceSection && data.target_audience) {
+        const audienceCard = targetAudienceSection.querySelector('.bg-white');
+        if (audienceCard) {
+            // Update primary audience
+            audienceCard.querySelector('h4').textContent = data.target_audience.primary || 'Target Audience';
+            
+            // Update description
+            const description = audienceCard.querySelector('p');
+            if (description) {
+                description.textContent = `Companies in the ${data.target_audience.industry} industry, typically ${data.target_audience.company_size}, facing challenges with ${data.target_audience.pain_points?.join(', ') || 'various operational issues'}.`;
+            }
+            
+            // Update the details grid
+            const detailDivs = audienceCard.querySelectorAll('.grid > div');
+            if (detailDivs.length >= 4) {
+                detailDivs[0].querySelector('p').textContent = data.target_audience.industry || 'Technology';
+                detailDivs[1].querySelector('p').textContent = data.target_audience.company_size || '50-500 employees';
+                detailDivs[2].querySelector('p').textContent = data.target_audience.roles?.[0] || 'Decision Makers';
+                detailDivs[3].querySelector('p').textContent = data.target_audience.pain_points?.[0] || 'Operational Efficiency';
+            }
+        }
+    }
+    
+    // Update recommended markets section
+    const marketsSection = document.querySelector('#analysis-results .grid .bg-gray-50:last-child');
+    if (marketsSection && data.recommended_markets) {
+        const marketsContainer = marketsSection.querySelector('.space-y-4');
+        if (marketsContainer) {
+            // Clear existing markets
+            marketsContainer.innerHTML = '';
+            
+            // Add new markets from AI response
+            data.recommended_markets.forEach((market, index) => {
+                const marketDiv = document.createElement('div');
+                marketDiv.className = 'flex items-start space-x-4 p-4 bg-white rounded-lg border border-gray-200';
+                marketDiv.innerHTML = `
+                    <div class="w-8 h-8 bg-indigo-500 text-white rounded-full flex items-center justify-center font-bold text-sm">${index + 1}</div>
+                    <div>
+                        <h4 class="font-bold mb-1 text-gray-800">${market.market}</h4>
+                        <p class="text-gray-600 text-sm">${market.description}</p>
+                    </div>
+                `;
+                marketsContainer.appendChild(marketDiv);
+            });
+        }
+    }
+    
+    // Update regions section
+    const regionsSection = document.querySelector('#analysis-results .bg-gray-50.border.border-gray-200.rounded-lg.p-6.mb-8');
+    if (regionsSection && data.target_regions) {
+        const regionsGrid = regionsSection.querySelector('.grid');
+        if (regionsGrid) {
+            // Clear existing regions
+            regionsGrid.innerHTML = '';
+            
+            // Add new regions from AI response
+            data.target_regions.forEach(region => {
+                const regionDiv = document.createElement('div');
+                regionDiv.className = 'bg-white border border-gray-200 rounded-lg p-4 text-center';
+                
+                // Simple flag emoji mapping
+                const flags = {
+                    'North America': '🇺🇸',
+                    'Europe': '🇪🇺',
+                    'Asia-Pacific': '🌏',
+                    'Latin America': '🌎',
+                    'Middle East': '🌍',
+                    'Africa': '🌍'
+                };
+                
+                regionDiv.innerHTML = `
+                    <div class="text-2xl mb-2">${flags[region.region] || '🌍'}</div>
+                    <h4 class="font-bold text-gray-800">${region.region}</h4>
+                    <p class="text-gray-600 text-sm">${region.reasoning || `Score: ${region.score}`}</p>
+                `;
+                regionsGrid.appendChild(regionDiv);
+            });
+        }
     }
 }
 
